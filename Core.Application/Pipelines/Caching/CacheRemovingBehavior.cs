@@ -42,13 +42,14 @@ public class CacheRemovingBehavior<TRequest, TResponse> : IPipelineBehavior<TReq
 
                 await _cache.RemoveAsync(request.CacheGroupKey, cancellationToken);
                 await _cache.RemoveAsync(key: $"{request.CacheGroupKey}SlidingExpiration", cancellationToken);
+            } 
+            else 
+            {
+                if(request.CacheKey != null)
+                    await _cache.RemoveAsync(request.CacheKey, cancellationToken);
             }
         }
-
-        if (request.CacheKey!=null)
-        {
-            await _cache.RemoveAsync(request.CacheKey,cancellationToken);
-        }
+        
         return response;
     }
 }
